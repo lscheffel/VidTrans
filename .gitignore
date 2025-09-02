@@ -1,0 +1,74 @@
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+
+# IDEs
+.idea/
+.vscode/
+*.geany
+
+# Node
+node_modules/
+
+# Build
+build/
+dist/
+
+# Logs e temporários
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Arquivos compactados (backups, rollback)
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Testes e cobertura
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Ambientes
+.env
+.env.*
+
+# Metadata Python
+*.egg-info/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Backups pessoais
+temp/
+backup/
+contrato_*.pdf
+contrato_*.html
+contrato_*.md
+contrato_*.docx
+
+# Images e videos
+*.jpg
+*.mp4
+*.mkv
+*.mov
+*.mpg
+*.gif
+*.webp
+*.png
+*.exe
+
+
