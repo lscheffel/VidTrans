@@ -162,6 +162,17 @@ class SubtitleExtractor(QWidget):
                 return new_path
         return base_path
 
+    def force_copy(self, src, dst):
+        try:
+            if os.path.exists(dst):
+                os.remove(dst)
+            shutil.copy2(src, dst)
+            os.remove(src)
+            return True
+        except Exception as e:
+            print(f"[COPY FAIL] {src} → {dst}: {e}")
+            return False
+
     def run_extraction(self):
         input_folder = Path(self.input_path.text().strip()).resolve()
         output_folder = Path(self.output_path.text().strip()).resolve()
@@ -170,6 +181,13 @@ class SubtitleExtractor(QWidget):
 
         output_folder.mkdir(parents=True, exist_ok=True)
         TEMP_FOLDER.mkdir(parents=True, exist_ok=True)
+
+        for temp_file in TEMP_FOLDER.glob("*"):
+            try:
+                temp_file.unlink()
+            except Exception as e:
+                print(f"[WARN] Não foi possível apagar {temp_file.name}: {e}")
+
         print("\n[START] Iniciando extração...\n")
 
         for file, full_path in self.files:
@@ -182,8 +200,11 @@ class SubtitleExtractor(QWidget):
             track_id = selected.split(":")[0].strip()
             base_name = os.path.splitext(file)[0]
             temp_ass = TEMP_FOLDER / f"temp_{uuid.uuid4().hex[:8]}.ass"
-            temp_srt = TEMP_FOLDER / f"{base_name}.srt"
-            final_srt = Path(self.get_unique_filename(str(output_folder / f"{base_name}.srt")))
+            temp_srt = TEMP_FOLDER / f"temp_{uuid.uuid4().hex[:8]}.srt"
+            final_srt_name = f"{base_name}.srt"
+            final_srt = Path(self.get_unique_filename(str(output_folder / final_srt_name)))
+            final_srt = Path(os.path.realpath(str(final_srt)))
+            final_srt.parent.mkdir(parents=True, exist_ok=True)
 
             try:
                 print(f"[EXTRACT] {file} - faixa {track_id}")
@@ -201,7 +222,7 @@ class SubtitleExtractor(QWidget):
                 ], check=True)
 
                 temp_ass.unlink()
-                shutil.move(str(temp_srt), str(final_srt))
+                self.force_copy(str(temp_srt), str(final_srt))
                 print(f"[SUCCESS] {final_srt.name} criado.\n")
 
             except Exception as e:
