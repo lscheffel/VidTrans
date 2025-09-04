@@ -1,3 +1,12 @@
+## Extrator e Conversor de Legendas com Interface Gráfica em PyQt6
+# Este script cria uma aplicação GUI para extrair legendas de arquivos de vídeo MKV e converter para outras codificações.
+# Ele utiliza ferramentas como ffmpeg, mkvextract e mkvmerge para manipular arquivos de mídia.
+# O usuário pode escolher uma pasta de entrada contendo arquivos de vídeo MKV, selecionar a faixa de legenda desejada,
+# escolher o formato e a codificação de saída, e iniciar o processo de extração e conversão.
+
+## Produzico com o Grok
+# https://grok.com/c/ae717af9-8fc4-443e-9462-5cf9b3961df5
+
 import sys
 from pathlib import Path
 import subprocess
@@ -9,7 +18,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QListWidget, QComboBox, QCheckBox, QMessageBox, QFileDialog, QTextEdit
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QThread
+from PyQt6.QtCore import Qt, pyqtSignal, QThread, QObject
 
 FFMPEG_PATH = r"C:\Program Files\FFMPEG\bin\ffmpeg.exe"
 FFPROBE_PATH = r"C:\Program Files\FFMPEG\bin\ffprobe.exe"
