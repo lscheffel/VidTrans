@@ -18,7 +18,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QTabWidget, QWidget, QVBoxLayout, QHBoxLayout,
     QLabel, QLineEdit, QPushButton, QListWidget, QComboBox, QCheckBox, QMessageBox, QFileDialog, QTextEdit
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QThread, QObject
+from PyQt6.QtCore import Qt, pyqtSignal, QThread, QObject, QEvent
 
 FFMPEG_PATH = r"C:\Program Files\FFMPEG\bin\ffmpeg.exe"
 FFPROBE_PATH = r"C:\Program Files\FFMPEG\bin\ffprobe.exe"
@@ -282,12 +282,12 @@ class SubtitleApp(QMainWindow):
             cmd = [MKVEXTRACT_PATH, "tracks", str(mkv_file), f"{track_id}:{temp_sub}"]
             self.run_cmd(cmd, verbose, "Extração")
             
-            self.convert_sub(temp_sub, sub_file, out_format, out_encoding, verbose)
+            self.convert_sub(temp_sub, sub_file, out_format, out_encoding, out_encoding_text, verbose)
             
             os.remove(temp_sub)
         
         self.log("Extração e conversão concluídas.", verbose)
-        QApplication.postEvent(self, QEvent(QEvent.User))  # Para mostrar mensagem final
+        QApplication.postEvent(self, QEvent(QEvent.Type.User))  # Para mostrar mensagem final
 
     def start_execute_tab2(self):
         self.log_text2.clear()
@@ -316,12 +316,12 @@ class SubtitleApp(QMainWindow):
             
             self.log(f"Processando {file_name}...", verbose)
             
-            self.convert_sub(sub_file_in, sub_file_out, out_format, out_encoding, verbose)
+            self.convert_sub(sub_file_in, sub_file_out, out_format, out_encoding, out_encoding_text, verbose)
         
         self.log("Conversão concluída.", verbose)
         QApplication.postEvent(self, QEvent(QEvent.User))
 
-    def convert_sub(self, input_sub, output_sub, out_format, out_encoding, verbose=False):
+    def convert_sub(self, input_sub, output_sub, out_format, out_encoding, out_encoding_text, verbose=False):
         temp_conv = TEMP_FOLDER / f"conv.{out_format}"
         cmd = [FFMPEG_PATH, "-i", str(input_sub), str(temp_conv)]
         self.run_cmd(cmd, verbose, "Conversão de formato")
